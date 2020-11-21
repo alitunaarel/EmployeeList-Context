@@ -3,40 +3,31 @@ import { Form, Button } from 'react-bootstrap'
 import { EmployeeContext } from '../context/EmployeeContext'
 import { useContext, useState } from 'react'
 
-const AddForm = () => {
+const EditForm = ({ theEmployee }) => {
 
-    const { addEmployee } = useContext(EmployeeContext)
 
-    /*    const [name, setName] = useState("");
-       const [email, setEmail] = useState("");
-       const [address, setAddress] = useState("");
-       const [phone, setPhone] = useState(""); */
+    const { updateEmployee } = useContext(EmployeeContext)
 
-    const [newEmployee, setNewEmployee] = useState({
-        name: "", email: "", address: "", phone: ""
-    })
+    const employee = theEmployee;
+    const id = employee.id;
 
-    const { name, email, address, phone } = newEmployee;
+    const [name, setName] = useState(employee.name)
+    const [email, setEmail] = useState(employee.email)
+    const [address, setAddress] = useState(employee.address)
+    const [phone, setPhone] = useState(employee.phone)
 
-    const onInputChange = (e) => {
-        setNewEmployee({ ...newEmployee, [e.target.name]: e.target.value })
-    }
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        addEmployee(name, email, address, phone)
-    }
 
 
     return (
-        <Form onSubmit={handleSubmit}>
+        <Form >
             <Form.Group>
                 <Form.Control
                     type="text"
                     placeholder="Enter text"
                     name="name"
                     value={name}
-                    onChange={e => onInputChange(e)}
+                    onChange={(e) => setName(e.target.value)}
                     required
                 />
             </Form.Group>
@@ -47,7 +38,7 @@ const AddForm = () => {
                     placeholder="Enter email"
                     name="email"
                     value={email}
-                    onChange={e => onInputChange(e)}
+
                     required
                 />
             </Form.Group>
@@ -58,7 +49,7 @@ const AddForm = () => {
                     placeholder="Adress"
                     name="address"
                     value={address}
-                    onChange={e => onInputChange(e)}
+
                     row={3}
                     required
                 />
@@ -70,14 +61,15 @@ const AddForm = () => {
                     placeholder="Phone"
                     name="phone"
                     value={phone}
-                    onChange={e => onInputChange(e)}
+
                 />
             </Form.Group>
 
             <Button variant="primary" type="submit" block>
-                Add New Employee</Button>{' '}
+                Edit Employee</Button>
         </Form>
     )
 }
 
-export default AddForm;
+export default EditForm;
+

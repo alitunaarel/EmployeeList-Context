@@ -1,5 +1,5 @@
 
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import Employee from './Employee';
 import { EmployeeContext } from '../context/EmployeeContext';
 import { Button, Modal } from 'react-bootstrap';
@@ -15,6 +15,9 @@ const EmployeeList = () => {
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
+    useEffect(() => {
+        handleClose()
+    }, [employees])
 
     return (
 
@@ -42,7 +45,13 @@ const EmployeeList = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    <Employee employees={employees} />
+
+                    {employees.sort((a, b) => a.name.localeCompare(b.name))
+                        .map(employee => (
+                            <tr key={employee.id}>
+                                <Employee employee={employee} />
+                            </tr>
+                        ))}
                 </tbody>
             </table>
 
