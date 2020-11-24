@@ -16,11 +16,19 @@ const EditForm = ({ theEmployee }) => {
     const [address, setAddress] = useState(employee.address)
     const [phone, setPhone] = useState(employee.phone)
 
+    const updatedEmployee = { id, name, email, address, phone }
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        updateEmployee(id, updatedEmployee);
+    }
+
+
 
 
 
     return (
-        <Form >
+        <Form onSubmit={handleSubmit} >
             <Form.Group>
                 <Form.Control
                     type="text"
@@ -38,7 +46,7 @@ const EditForm = ({ theEmployee }) => {
                     placeholder="Enter email"
                     name="email"
                     value={email}
-
+                    onChange={e => setEmail(e.target.value)}
                     required
                 />
             </Form.Group>
@@ -49,7 +57,7 @@ const EditForm = ({ theEmployee }) => {
                     placeholder="Adress"
                     name="address"
                     value={address}
-
+                    onChange={e => setAddress(e.target.value)}
                     row={3}
                     required
                 />
@@ -61,7 +69,7 @@ const EditForm = ({ theEmployee }) => {
                     placeholder="Phone"
                     name="phone"
                     value={phone}
-
+                    onChange={e => setPhone(e.target.value)}
                 />
             </Form.Group>
 
