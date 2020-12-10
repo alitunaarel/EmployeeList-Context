@@ -1,11 +1,29 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useEffect, useReducer, useState } from "react";
 import { v4 as uuidv4 } from 'uuid'
 
 export const EmployeeContext = createContext();
 
 const EmployeeContextProvider = (props) => {
-
-    const [employees, setEmployees] = useState([
+    /* 
+        const [employees, setEmployees] = useState() */
+    const reducer = (employees, action) => {
+        switch (action.type) {
+            case 'add_employee':
+                return [...employees, {
+                    id: uuidv4(),
+                    name: action.employee.name,
+                    email: action.employee.email,
+                    address: action.employee.address,
+                    phone: action.employee.phone,
+                }]
+            case 'remove_employee':
+                return employees.filter(employee => employee.id !== action.id)
+                24: 36
+            default:
+                break;
+        }
+    }
+    const [employees, dispatch] = useReducer(reducer, [
         { id: uuidv4(), name: 'ali', email: 'ali@email.com', address: 'blabla', phone: '123456789' },
         { id: uuidv4(), name: 'cali', email: 'bali@email.com', address: 'blabla', phone: '123456789' },
         { id: uuidv4(), name: 'bali', email: 'kali@email.com', address: 'blabla', phone: '123456789' },
@@ -28,20 +46,20 @@ const EmployeeContextProvider = (props) => {
     const sortedEmployees = employees.sort((a, b) => a.name.localeCompare(b.name))
 
 
-    const addEmployee = (name, email, address, phone) => {
-        setEmployees([...employees, { id: uuidv4(), name, email, address, phone }])
-    }
+    /*     const addEmployee = (name, email, address, phone) => {
+            setEmployees([...employees, { id: uuidv4(), name, email, address, phone }])
+        } */
 
-    const deleteEmployee = (id) => {
-        setEmployees(employees.filter(employee => employee.id !== id))
-    }
+    /*   const deleteEmployee = (id) => {
+          setEmployees(employees.filter(employee => employee.id !== id))
+      } */
 
     const updateEmployee = (id, updatedEmployee) => {
         setEmployees(employees.map(employee => (employee.id === id ? updatedEmployee : employee)))
     }
 
     return (
-        <EmployeeContext.Provider value={{ sortedEmployees, addEmployee, deleteEmployee, updateEmployee }}>
+        <EmployeeContext.Provider value={{ sortedEmployees, dispatch, updateEmployee }}>
             {props.children}
         </EmployeeContext.Provider>
     )
