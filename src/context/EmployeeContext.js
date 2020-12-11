@@ -1,4 +1,4 @@
-import { createContext, useEffect, useReducer, useState } from "react";
+import { createContext, useEffect, useReducer } from "react";
 import { v4 as uuidv4 } from 'uuid'
 
 export const EmployeeContext = createContext();
@@ -18,9 +18,12 @@ const EmployeeContextProvider = (props) => {
                 }]
             case 'remove_employee':
                 return employees.filter(employee => employee.id !== action.id)
-                24: 36
+
+            case 'update_employee':
+                return employees.map(employee => (employee.id === action.id ? action.updatedEmployee : employee))
+
             default:
-                break;
+                return employees;
         }
     }
     const [employees, dispatch] = useReducer(reducer, [
@@ -32,12 +35,14 @@ const EmployeeContextProvider = (props) => {
         { id: uuidv4(), name: 'Fali', email: 'lali@email.com', address: 'blabla', phone: '123456789' },
         { id: uuidv4(), name: 'Gali', email: 'lali@email.com', address: 'blabla', phone: '123456789' },
         { id: uuidv4(), name: 'Hali', email: 'lali@email.com', address: 'blabla', phone: '123456789' },
-    ])
+    ],
+        () => {
+            const employees = localStorage.getItem('employees')
+            return employees ? JSON.parse(employees) : []
+        }
+    )
 
-    useEffect(() => {
-        const employees = localStorage.getItem('employees')
-        setEmployees(JSON.parse(employees))
-    }, [])
+
 
     useEffect(() => {
         localStorage.setItem('employees', JSON.stringify(employees))
@@ -54,12 +59,12 @@ const EmployeeContextProvider = (props) => {
           setEmployees(employees.filter(employee => employee.id !== id))
       } */
 
-    const updateEmployee = (id, updatedEmployee) => {
-        setEmployees(employees.map(employee => (employee.id === id ? updatedEmployee : employee)))
-    }
+    /*    const updateEmployee = (id, updatedEmployee) => {
+           setEmployees(employees.map(employee => (employee.id === id ? updatedEmployee : employee)))
+       } */
 
     return (
-        <EmployeeContext.Provider value={{ sortedEmployees, dispatch, updateEmployee }}>
+        <EmployeeContext.Provider value={{ sortedEmployees, dispatch, }}>
             {props.children}
         </EmployeeContext.Provider>
     )
